@@ -1,0 +1,112 @@
+@import "tailwindcss";
+@config "../../tailwind.config.ts";
+
+:root {
+  /* ─── Brand Palette ─────────────────────────────────── */
+  --color-primary-green: #83CD20;       /* Primary buttons, qualify checkbox, secondary card */
+  --color-dark-green: #034833;          /* Session main header, card headers/subheaders, process bg, qualify checkbox tick */
+  --color-status-green: #43B748;        /* Stats bg, status bg, session sub-header text */
+  --color-qualify-bg: #EDFFD4;          /* Qualify session background */
+
+  --color-text-primary: #FFFFFF;        /* Primary text */
+  --color-text-body: #3E3E3E;           /* Session description, support cards text */
+  --color-text-dark: #1A1A1A;           /* Card sub-header, card months text, qualify checkbox text */
+
+  --color-support-border: #282828;      /* Support button border */
+
+  /* ─── Semantic aliases (use these in components) ────── */
+
+  /* Backgrounds */
+  --bg-stats: var(--color-status-green);
+  --bg-process: var(--color-dark-green);
+  --text-process-title: var(--color-primary-green);
+  --process-timeing-bg: #43B748;
+  --bg-qualify-session: var(--color-qualify-bg);
+
+  /* Text */
+  --text-primary: var(--color-text-primary);
+  --text-session-main-header: var(--color-dark-green);
+  --text-session-sub-header: var(--color-status-green);
+  --text-session-description: var(--color-text-body);
+  --text-card-main-header: var(--color-dark-green);
+  --text-card-sub-header: var(--color-dark-green);
+  --card-bg-primary: #EDFFD4;
+  --text-card-description: var(--color-text-body);
+  --text-card-months: var(--color-text-dark);
+  --text-support-card: var(--color-text-body);
+  --text-support-card-sub-header: var(--color-dark-green);
+   --text-support-card-header: var(--color-primary-green);
+  --divider-primary: var(--color-primary-green);
+
+  /* Buttons */
+  --btn-primary-bg: var(--color-primary-green);
+
+  /* Cards */
+  --card-secondary-color: var(--color-primary-green);
+  --card-sub-header-color: var(--color-text-dark);
+
+  /* Qualify section */
+  --qualify-checkbox-border: var(--color-primary-green);
+  --qualify-checkbox-tick: var(--color-dark-green);
+  --qualify-checkbox-text: var(--color-text-dark);
+
+  /* Support */
+  --support-btn-border: var(--color-support-border);
+
+  /* Testimonials */
+  --testimonial-bg: var(--color-qualify-bg);
+  --testimonial-card-border: var(--color-primary-green);
+  --testimonial-card-header: var(--color-primary-green);
+  --testimonial-card-text: var(--color-text-body);
+  --testimonial-card-profile-name: var(--color-text-dark);
+  --testimonial-card-profile-subtitle: var(--color-text-body);
+
+   /* faq */
+  --text-faq-question: var(--color-text-dark);
+  --text-faq-answer: var(--color-text-body);
+
+
+  /* ─── Shadcn / Base tokens ───────────────────────────── */
+  --stats-bg: #43B748;
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  /* Brand: #83CD20 — primary CTAs */
+  --primary: 84.7 72.9% 46.5%;
+  --primary-foreground: 0 0% 8%;
+  --secondary: 210 40% 96.1%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 84.7 72.9% 46.5%;
+  --radius: 0.9rem;
+}
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-sora: var(--font-sora);
+  --font-titillium: var(--font-titillium);
+}
+
+body {
+  background: hsl(var(--background));
+  color: var(--text-primary);
+  font-family: var(--font-geist-sans), system-ui, -apple-system, Segoe UI, Roboto,
+    Arial, "Noto Sans", "Liberation Sans", sans-serif;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply min-h-screen antialiased;
+  }
+}
