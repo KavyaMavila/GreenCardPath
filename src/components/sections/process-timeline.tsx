@@ -152,16 +152,16 @@ export function ProcessTimelineSection() {
         </div>
 
         {/* MOBILE LAYOUT — single column, sequential order */}
-        <div className="lg:hidden">
+        <div className="lg:hidden ">
           {/* HEADER */}
           <FadeIn>
-            <p className="text-[16px] font-medium font-titillium uppercase tracking-[0.2em] text-white">
+            <p className="text-[16px] text-center font-medium font-titillium uppercase tracking-[0.2em] text-white">
               THE PROCESS
             </p>
-            <h2 className="mt-5 text-[36px] font-sora font-bold leading-tight text-[#83CD20]">
+            <h2 className="mt-5 text-[36px] text-center font-sora font-bold leading-tight text-[#83CD20]">
               How We Get You There
             </h2>
-            <p className="mt-4 text-[18px] font-titillium leading-[1.7] text-white/90">
+            <p className="mt-4 text-[18px] text-center font-titillium leading-[1.7] text-white/90">
               From first call to green card approval — here's exactly what
               happens.
             </p>

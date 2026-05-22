@@ -51,7 +51,7 @@ const fields: FormField[] = [
   },
 ];
 
-const inputClass = "h-12 rounded-sm border-[#83CD20] focus-visible:ring-[#83CD20]/30";
+const inputClass = "h-12 rounded-sm border-[#83CD20] focus-visible:ring-[#83CD20]/30 text-[#1A1A1A] placeholder:text-gray-400";
 const labelClass = "text-[16px] font-titillium font-medium text-[#1A1A1A]";
 
 export function ContactFormSection() {
@@ -129,7 +129,7 @@ export function ContactFormSection() {
                         name="notes"
                         placeholder="Your goals, timelines, questions..."
                         rows={7}
-                        className="rounded-sm border-[#83CD20] focus-visible:ring-[#83CD20]/30"
+                        className="rounded-sm border-[#83CD20]  focus-visible:ring-[#83CD20]/30 text-[#1A1A1A]"
                       />
                     </div>
                   </div>
