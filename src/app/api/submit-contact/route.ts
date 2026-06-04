@@ -128,10 +128,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Server misconfiguration." }, { status: 500 });
     }
 
-    const response = await calendar.events.insert({
-      calendarId,
-      resource: event,
-    });
+   const response = await calendar.events.insert({
+  calendarId,
+  requestBody: event,
+});
 
     console.log("✅ Event created:", response.data.htmlLink);
     return NextResponse.json({ success: true });
