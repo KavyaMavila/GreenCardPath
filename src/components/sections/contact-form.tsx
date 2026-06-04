@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Script from "next/script";
 
 import { Container } from "@/components/layout/container";
 import { FadeIn } from "@/components/layout/fade-in";
@@ -20,142 +21,306 @@ interface FormField {
 }
 
 const fields: FormField[] = [
-  {
-    id: "fullName",
-    label: "Full Name *",
-    autoComplete: "name",
-    placeholder: "Jane Doe",
-    required: true,
-  },
-  {
-    id: "email",
-    label: "Email *",
-    type: "email",
-    autoComplete: "email",
-    placeholder: "Jane@example.com",
-    required: true,
-  },
-  {
-    id: "phone",
-    label: "Phone (optional)",
-    type: "tel",
-    autoComplete: "tel",
-    placeholder: "+1 (555) 000-0000",
-  },
-  {
-    id: "linkedin",
-    label: "LinkedIn URL (optional — helps us prep)",
-    inputMode: "url",
-    autoComplete: "url",
-    placeholder: "linkedin.com/in/janedoe",
-  },
+  { id: "fullName",  label: "Full Name *",                              autoComplete: "name",  placeholder: "Jane Doe",            required: true },
+  { id: "email",     label: "Email *",          type: "email",          autoComplete: "email", placeholder: "Jane@example.com",    required: true },
+  { id: "phone",     label: "Phone (optional)", type: "tel",            autoComplete: "tel",   placeholder: "+1 (555) 000-0000" },
+  { id: "linkedin",  label: "LinkedIn URL (optional — helps us prep)",  inputMode: "url",      autoComplete: "url", placeholder: "linkedin.com/in/janedoe" },
 ];
+
+const TIME_SLOTS = [
+  "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
+  "12:00", "12:30", "13:00", "13:30", "14:00", "14:30",
+  "15:00", "15:30", "16:00", "16:30", "17:00", "17:30",
+];
+
+function formatTimeLabel(t: string) {
+  const [h, m] = t.split(":").map(Number);
+  const ampm = h >= 12 ? "PM" : "AM";
+  const hour = h % 12 || 12;
+  return `${hour}:${m.toString().padStart(2, "0")} ${ampm}`;
+}
+
+function getTodayString() {
+  return new Date().toISOString().split("T")[0];
+}
 
 const inputClass = "h-12 rounded-sm border-[#83CD20] focus-visible:ring-[#83CD20]/30 text-[#1A1A1A] placeholder:text-gray-400";
 const labelClass = "text-[16px] font-titillium font-medium text-[#1A1A1A]";
+const SESSION_KEY = "contact_form_submitted";
 
 export function ContactFormSection() {
   const [submitted, setSubmitted] = useState(false);
+  const [alreadySubmitted, setAlreadySubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
+  const [preferredDate, setPreferredDate] = useState("");
+  const [preferredTime, setPreferredTime] = useState("");
+  const [recaptchaReady, setRecaptchaReady] = useState(false);
+
+  useEffect(() => {
+    if (sessionStorage.getItem(SESSION_KEY)) {
+      setAlreadySubmitted(true);
+    }
+  }, []);
+
+ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (sessionStorage.getItem(SESSION_KEY)) {
+      setAlreadySubmitted(true);
+      return;
+    }
+
+    if (!window.grecaptcha) {
+      setError("reCAPTCHA not loaded. Please refresh and try again.");
+      return;
+    }
+
+    // ── Read form values IMMEDIATELY before any await ─────────────────────
+    // (React nullifies e.currentTarget after async calls)
+    const form = e.currentTarget;
+    const data = {
+      fullName:      (form.elements.namedItem("fullName")       as HTMLInputElement).value,
+      email:         (form.elements.namedItem("email")          as HTMLInputElement).value,
+      phone:         (form.elements.namedItem("phone")          as HTMLInputElement).value,
+      linkedin:      (form.elements.namedItem("linkedin")       as HTMLInputElement).value,
+      notes:         (form.elements.namedItem("notes")          as HTMLTextAreaElement).value,
+      preferredDate: preferredDate.trim(),
+      preferredTime: preferredTime.trim(),
+    };
+
+    setIsSubmitting(true);
+    setError("");
+
+    try {
+      // ── Get reCAPTCHA token AFTER reading form values ───────────────────
+      const recaptchaToken = await new Promise<string>((resolve, reject) => {
+        window.grecaptcha.ready(() => {
+          window.grecaptcha
+            .execute(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!, { action: "contact" })
+            .then(resolve)
+            .catch(reject);
+        });
+      });
+
+      const res = await fetch("/api/submit-contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...data, recaptchaToken }),
+      });
+
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || "Submission failed");
+
+      sessionStorage.setItem(SESSION_KEY, JSON.stringify({
+        name: data.fullName,
+        email: data.email,
+        submittedAt: new Date().toISOString(),
+      }));
+
+      setSubmitted(true);
+    } catch (err: any) {
+      setError(err.message || "Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // ── Already submitted ─────────────────────────────────────────────────────
+  if (alreadySubmitted) {
+    const saved = JSON.parse(sessionStorage.getItem(SESSION_KEY) || "{}");
+    return (
+      <section id="contact" className="relative bg-[#034833]">
+        <Container className="pt-10 pb-20 lg:pt-12">
+          <div className="flex items-center justify-center">
+            <div className="rounded-sm bg-white px-10 py-16 shadow-xl text-center max-w-md w-full">
+              <div className="text-5xl mb-4">✓</div>
+              <h3 className="font-sora text-xl font-bold text-[#1A1A1A] mb-2">Your details have been captured</h3>
+              <p className="text-gray-500 text-sm">
+                Hi <strong>{saved.name}</strong>, we already received your message and will be in touch at <strong>{saved.email}</strong> shortly.
+              </p>
+            </div>
+          </div>
+        </Container>
+      </section>
+    );
+  }
 
   return (
-    <section id="contact" className="relative bg-[#034833]">
-      <Container className="pt-10 pb-0 lg:pt-12">
-        <FadeIn>
-          <div className="grid lg:grid-cols-2 lg:gap-16 lg:items-stretch">
+    <>
+      {/* reCAPTCHA v3 — invisible, loads in background */}
+      <Script
+        src={`https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`}
+        onLoad={() => setRecaptchaReady(true)}
+      />
 
-            {/* LEFT */}
-            <div className="flex flex-col pb-20 lg:pb-28">
-              <p className="text-center font-titillium text-[13px] font-semibold uppercase tracking-[0.2em] text-white lg:text-left">
-                GET STARTED
-              </p>
-              <h2 className="mt-3 text-center font-sora font-bold text-[48px] leading-tight text-[#83CD20] lg:text-left">
-                Check Your<br />Eligibility
-              </h2>
+      <section id="contact" className="relative bg-[#034833]">
+        <Container className="pt-10 pb-0 lg:pt-12">
+          <FadeIn>
+            <div className="grid lg:grid-cols-2 lg:gap-16 lg:items-stretch">
 
-              {/* Desktop image */}
-              <div className="relative mt-10 hidden overflow-hidden rounded-md lg:block" style={{ height: 440 }}>
-                <Image src="/images/formPic.webp" alt="Person typing on laptop" fill className="object-cover object-center" />
-              </div>
-
-              {/* Mobile image */}
-              <div className="relative mt-8 overflow-hidden rounded-2xl lg:hidden" style={{ aspectRatio: "16/9" }}>
-                <Image src="/images/formPic.webp" alt="Person typing on laptop" fill className="object-cover" />
-              </div>
-            </div>
-
-            {/* RIGHT */}
-            <div className="flex flex-col mb-20">
-              <div className="flex-1 rounded-sm bg-white px-8 pt-10 pb-12 shadow-xl lg:px-10 lg:pt-12">
-
-                {/* Progress bar */}
-                <div className="mb-8 flex items-center justify-between gap-4">
-                  <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-gray-100">
-                    <div className="h-full w-full rounded-full bg-[#83CD20]" />
-                  </div>
-                  <span className="shrink-0 font-titillium text-[13px] text-[#4A4A4A]">Step 5 of 5</span>
+              {/* LEFT */}
+              <div className="flex flex-col pb-20 lg:pb-28">
+                <p className="text-center font-titillium text-[13px] font-semibold uppercase tracking-[0.2em] text-white lg:text-left">
+                  GET STARTED
+                </p>
+                <h2 className="mt-3 text-center font-sora font-bold text-[48px] leading-tight text-[#83CD20] lg:text-left">
+                  Check Your<br />Eligibility
+                </h2>
+                <div className="relative mt-10 hidden overflow-hidden rounded-md lg:block" style={{ height: 440 }}>
+                  <Image src="/images/formPic.webp" alt="Person typing on laptop" fill className="object-cover object-center" />
                 </div>
-
-                <h3 className="mb-10 font-sora text-[22px] font-bold text-[#1A1A1A]">
-                  Let's get you on a call.
-                </h3>
-
-                <form onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }} noValidate>
-                  <div className="space-y-7">
-
-                    {/* Dynamic text inputs */}
-                    {fields.map(({ id, label, type, autoComplete, placeholder, required, inputMode }) => (
-                      <div key={id} className="space-y-2">
-                        <Label htmlFor={id} className={labelClass}>{label}</Label>
-                        <Input
-                          id={id}
-                          name={id}
-                          type={type}
-                          autoComplete={autoComplete}
-                          placeholder={placeholder}
-                          required={required}
-                          inputMode={inputMode}
-                          className={inputClass}
-                        />
-                      </div>
-                    ))}
-
-                    {/* Textarea */}
-                    <div className="space-y-2">
-                      <Label htmlFor="notes" className={labelClass}>
-                        Anything else we should know?
-                      </Label>
-                      <Textarea
-                        id="notes"
-                        name="notes"
-                        placeholder="Your goals, timelines, questions..."
-                        rows={7}
-                        className="rounded-sm border-[#83CD20]  focus-visible:ring-[#83CD20]/30 text-[#1A1A1A]"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Submit */}
-                  <div className="mt-14 border-t border-gray-200 pt-6 flex items-center justify-end">
-                    {submitted ? (
-                      <p className="text-sm text-gray-500" role="status" aria-live="polite">
-                        ✓ We'll be in touch soon!
-                      </p>
-                    ) : (
-                      <button
-                        type="submit"
-                        className="flex font-titillium items-center gap-2 rounded-sm bg-[#83CD20] px-7 py-3 text-[14px] font-semibold text-white hover:bg-[#72b81b] transition-colors"
-                      >
-                        Submit ✓
-                      </button>
-                    )}
-                  </div>
-                </form>
+                <div className="relative mt-8 overflow-hidden rounded-2xl lg:hidden" style={{ aspectRatio: "16/9" }}>
+                  <Image src="/images/formPic.webp" alt="Person typing on laptop" fill className="object-cover" />
+                </div>
               </div>
-            </div>
 
-          </div>
-        </FadeIn>
-      </Container>
-    </section>
+              {/* RIGHT */}
+              <div className="flex flex-col mb-20">
+                <div className="flex-1 rounded-sm bg-white px-8 pt-10 pb-12 shadow-xl lg:px-10 lg:pt-12">
+
+                  {/* Progress bar */}
+                  <div className="mb-8 flex items-center justify-between gap-4">
+                    <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-gray-100">
+                      <div className="h-full w-full rounded-full bg-[#83CD20]" />
+                    </div>
+                    <span className="shrink-0 font-titillium text-[13px] text-[#4A4A4A]">Step 5 of 5</span>
+                  </div>
+
+                  <h3 className="mb-10 font-sora text-[22px] font-bold text-[#1A1A1A]">
+                    Let's get you on a call.
+                  </h3>
+
+                  {/* ── Success state ── */}
+                  {submitted ? (
+                    <div className="flex flex-col items-center justify-center py-10 text-center gap-3">
+                      <div className="text-5xl">✓</div>
+                      <p className="font-sora text-xl font-bold text-[#1A1A1A]">We'll be in touch soon!</p>
+                      {preferredDate && preferredTime ? (
+                        <p className="text-sm text-gray-500">
+                          📅 Your slot: <strong>{preferredDate}</strong> at <strong>{formatTimeLabel(preferredTime)}</strong>
+                        </p>
+                      ) : (
+                        <p className="text-sm text-gray-500">
+                          📅 We'll schedule your call and be in touch shortly.
+                        </p>
+                      )}
+                      <p className="text-xs text-gray-400">Your details have been captured.</p>
+                    </div>
+                  ) : (
+                    <form onSubmit={handleSubmit} noValidate>
+                      <div className="space-y-7">
+
+                        {fields.map(({ id, label, type, autoComplete, placeholder, required, inputMode }) => (
+                          <div key={id} className="space-y-2">
+                            <Label htmlFor={id} className={labelClass}>{label}</Label>
+                            <Input
+                              id={id} name={id} type={type}
+                              autoComplete={autoComplete}
+                              placeholder={placeholder}
+                              required={required}
+                              inputMode={inputMode}
+                              className={inputClass}
+                              disabled={isSubmitting}
+                            />
+                          </div>
+                        ))}
+
+                        <div className="space-y-2">
+                          <Label htmlFor="notes" className={labelClass}>Anything else we should know?</Label>
+                          <Textarea
+                            id="notes" name="notes"
+                            placeholder="Your goals, timelines, questions..."
+                            rows={4}
+                            className="rounded-sm border-[#83CD20] focus-visible:ring-[#83CD20]/30 text-[#1A1A1A]"
+                            disabled={isSubmitting}
+                          />
+                        </div>
+
+                        {/* ── Optional Date & Time ── */}
+                        <div className="rounded-md border border-dashed border-[#83CD20]/50 bg-[#f9fef2] px-5 py-5 space-y-4">
+                          <div>
+                            <p className="font-titillium text-[13px] font-semibold uppercase tracking-[0.15em] text-[#034833]">
+                              📅 Preferred Call Date & Time
+                            </p>
+                            <p className="text-xs text-gray-400 mt-1">
+                              Optional — leave blank and we'll reach out to schedule.
+                            </p>
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label htmlFor="preferredDate" className={labelClass}>Date</Label>
+                            <Input
+                              id="preferredDate"
+                              type="date"
+                              value={preferredDate}
+                              onChange={(e) => { setPreferredDate(e.target.value); setPreferredTime(""); }}
+                              min={getTodayString()}
+                              className={inputClass}
+                              disabled={isSubmitting}
+                            />
+                          </div>
+
+                          {preferredDate && (
+                            <div className="space-y-2">
+                              <Label className={labelClass}>Time Slot</Label>
+                              <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
+                                {TIME_SLOTS.map((slot) => (
+                                  <button
+                                    key={slot}
+                                    type="button"
+                                    onClick={() => setPreferredTime(slot === preferredTime ? "" : slot)}
+                                    disabled={isSubmitting}
+                                    className={`rounded-sm border py-2 text-[13px] font-titillium font-medium transition-colors ${
+                                      preferredTime === slot
+                                        ? "border-[#83CD20] bg-[#83CD20] text-white"
+                                        : "border-gray-200 text-[#1A1A1A] hover:border-[#83CD20] hover:bg-[#f0fce0]"
+                                    }`}
+                                  >
+                                    {formatTimeLabel(slot)}
+                                  </button>
+                                ))}
+                              </div>
+                              {preferredDate && !preferredTime && (
+                                <p className="text-xs text-amber-500 mt-1">Select a time slot or leave both blank to skip.</p>
+                              )}
+                            </div>
+                          )}
+                        </div>
+
+                      </div>
+
+                      {error && (
+                        <p className="mt-4 rounded-sm bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-600">
+                          ⚠ {error}
+                        </p>
+                      )}
+
+                      <div className="mt-10 border-t border-gray-200 pt-6 flex items-center justify-between">
+                        <p className="text-xs text-gray-400">
+                          Protected by reCAPTCHA.{" "}
+                          <a href="https://policies.google.com/privacy" target="_blank" rel="noreferrer" className="underline">Privacy</a>
+                          {" "}&{" "}
+                          <a href="https://policies.google.com/terms" target="_blank" rel="noreferrer" className="underline">Terms</a>
+                        </p>
+                        <button
+                          type="submit"
+                          disabled={isSubmitting || !recaptchaReady}
+                          className="flex font-titillium items-center gap-2 rounded-sm bg-[#83CD20] px-7 py-3 text-[14px] font-semibold text-white hover:bg-[#72b81b] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                        >
+                          {isSubmitting ? "Submitting..." : "Submit ✓"}
+                        </button>
+                      </div>
+                    </form>
+                  )}
+
+                </div>
+              </div>
+
+            </div>
+          </FadeIn>
+        </Container>
+      </section>
+    </>
   );
 }
