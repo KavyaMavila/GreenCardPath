@@ -60,37 +60,7 @@ const fields: FormField[] = [
   },
 ];
 
-const TIME_SLOTS = [
-  "09:00",
-  "09:30",
-  "10:00",
-  "10:30",
-  "11:00",
-  "11:30",
-  "12:00",
-  "12:30",
-  "13:00",
-  "13:30",
-  "14:00",
-  "14:30",
-  "15:00",
-  "15:30",
-  "16:00",
-  "16:30",
-  "17:00",
-  "17:30",
-];
 
-function formatTimeLabel(t: string) {
-  const [h, m] = t.split(":").map(Number);
-  const ampm = h >= 12 ? "PM" : "AM";
-  const hour = h % 12 || 12;
-  return `${hour}:${m.toString().padStart(2, "0")} ${ampm}`;
-}
-
-function getTodayString() {
-  return new Date().toISOString().split("T")[0];
-}
 
 const inputClass =
   "h-12 rounded-sm border-[#83CD20] focus-visible:ring-[#83CD20]/30 text-[#1A1A1A] placeholder:text-gray-400";
@@ -244,17 +214,8 @@ export function ContactFormSection() {
                 <p className="text-center font-titillium text-[13px] font-semibold uppercase tracking-[0.2em] text-white lg:text-left">
                   GET STARTED
                 </p>
-                <h2
-                  className="mt-3 text-center font-sora font-bold
-text-[38px]
-xs:text-[42px]
-sm:text-[48px]
-leading-tight
-text-[#83CD20]"
-                >
-                  Check Your
-                  <br />
-                  Eligibility
+                 <h2 className="mt-3 text-center font-sora font-bold text-[48px] leading-tight text-[#83CD20] lg:text-left">
+                  Check Your<br />Eligibility
                 </h2>
                 <div
                   className="relative mt-10 hidden overflow-hidden rounded-md lg:block"
