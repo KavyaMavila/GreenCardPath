@@ -1,3 +1,5 @@
+
+"use client";
 import Link from "next/link";
 
 import { Container } from "@/components/layout/container";
@@ -110,11 +112,7 @@ export function ComparisonSection() {
                         {c.timeline}
                       </p>
 
-                      <p className="mt-2 text-[16px] sm:text-[18px] lg:text-[20px] font-titillium font-semibold text-[#3E3E3E]">
-                        (<span className="text-[#034833]">15 days</span> with{" "}
-                        <span className="text-[#034833]">Premium</span>{" "}
-                        Processing)
-                      </p>
+                      
                     </div>
                   </CardContent>
                 </Card>
@@ -132,9 +130,18 @@ export function ComparisonSection() {
               </p>
 
               {/* BUTTON */}
+
               <button
+                      onClick={() => {
+    document.getElementById("contact")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }}
                 className="rounded-xl bg-[#83CD20] px-5 py-3 text-[14px] font-semibold text-white transition hover:opacity-90 sm:px-7 sm:py-4 sm:text-[16px] ">
+               
                 Take the Eligibility Check →
+              
               </button>
             </div>
 

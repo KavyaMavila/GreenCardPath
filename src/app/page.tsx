@@ -11,7 +11,6 @@ import { PricingSection } from "@/components/sections/pricing";
 import { ProcessTimelineSection } from "@/components/sections/process-timeline";
 import { StatsSection } from "@/components/sections/stats";
 import { TestimonialsSection } from "@/components/sections/testimonials";
-import Image from "next/image";
 
 export default function Home() {
   return (
@@ -24,7 +23,7 @@ export default function Home() {
         <ComparisonSection />
         <EligibilityChecklistSection />
         <ProcessTimelineSection />
-        <PricingSection />
+        {/* <PricingSection /> */}
         <TestimonialsSection />
         <FaqSection />
         <ContactFormSection />

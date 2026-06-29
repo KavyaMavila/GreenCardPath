@@ -54,7 +54,7 @@ export function ProcessTimelineSection() {
             <FadeIn>
               <div className="relative aspect-[668/482] overflow-hidden rounded-sm">
                 <Image
-                  src="/images/theProcessPic.webp"
+                  src="/images/process image.webp"
                   alt="Consultation process"
                   fill
                   className="object-cover"
@@ -171,7 +171,7 @@ export function ProcessTimelineSection() {
           <FadeIn>
             <div className="relative mt-10 aspect-[668/482] overflow-hidden rounded-[24px]">
               <Image
-                src="/images/theProcessPic.webp"
+                src="/images/process image.webp"
                 alt="Consultation process"
                 fill
                 className="object-cover"

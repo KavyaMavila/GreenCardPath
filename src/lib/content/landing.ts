@@ -14,7 +14,7 @@ export const navItems = [
 ] as const;
 
 export const stats = [
-  { value: "50+", label: "Petitions filed" },
+  { value: "30+", label: "Petitions filed" },
   { value: "96%", label: "Approval rate" },
   { value: "0", label: "Employer needed" },
 ] as const;
@@ -27,7 +27,7 @@ export const comparison = {
   cards: [
     {
       key: "eb1a",
-      image:"/images/EB-photo.webp",
+      image:"/images/EB-1A image.webp",
       name: "EB-1A",
       tagline: "Extraordinary Ability",
       summary:
@@ -54,7 +54,7 @@ export const comparison = {
     },
     {
       key: "niw",
-      image:"/images/NIW-photo.webp",
+      image:"/images/NIW image.webp",
       name: "NIW",
       tagline: "National Interest Waiver",
       summary:
@@ -83,16 +83,19 @@ export const comparison = {
 } as const;
 
 export const eligibilityCriteria = [
-  "Published research papers or journal articles",
-  "Patents (filed or granted)",
-  "Awards, prizes, or honors in your field",
-  "Press or media coverage of your work",
-  "Served as a peer reviewer or judge",
-  "High salary relative to your field",
   "Leadership in a distinguished organization",
-  "Significant citations of your work",
+  "High salary relative to your field",
   "Original contributions of major significance",
+   "Awards, prizes, or honors in your field",
+  "Published research papers or journal articles",
   "Membership in selective professional associations",
+  "Served as a peer reviewer or judge",
+  "Press or media coverage of your work"
+ 
+  
+  
+  
+  
 ] as const;
 
 export const processSteps = [
@@ -281,3 +284,41 @@ export const steps = [
       "Submit to USCIS. We handle any RFE (Request for Evidence) responses. Premium processing available for 15-day adjudication.",
   },
 ] as const ; 
+
+
+export const INTEREST_OPTIONS = [
+  "EB-1A (Extraordinary Ability)",
+  "NIW (National Interest Waiver)",
+  "Not sure — help me figure out which",
+  "Just want a profile evaluation",
+] as const;
+
+export const IMMIGRATION_OPTIONS = [
+  "Working in the US (H-1B, O-1, L-1, etc)",
+  "On F-1 / OPT / STEM OPT",
+  "Outside the US, looking to move",
+  "Other situation",
+] as const;
+
+export const ACHIEVEMENTS = [
+  "Published research papers or articles",
+  "Patents (filed or granted)",
+  "Awards or honors in my field",
+  "Press or media coverage of my work",
+  "Peer reviewer or judge",
+  "High salary relative to my field",
+  "Leadership in a distinguished org",
+  "Significant citations of my work",
+  "Original contributions of major significance",
+  "Membership in selective associations",
+] as const;
+
+export const FIELDS = [
+  "Software / AI / Data Science",
+  "Research / Academia",
+  "Engineering",
+  "Business / Entrepreneurship",
+  "Healthcare / Biotech",
+  "Other",
+] as const;
+

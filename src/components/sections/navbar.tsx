@@ -37,22 +37,19 @@ export function Navbar() {
             </Link>
           ))}
           <Button asChild>
-            <Link href="#contact">Free Consultation
-            <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
+            <Link href="#contact">
+              Free Consultation
+              <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
             </Link>
           </Button>
         </nav>
 
         <div className="flex items-center gap-2 lg:hidden">
-          <Button
-            size="sm"
-            asChild
-            className="hidden sm:inline-flex "
-          >
-            <Link href="#contact">Free Consultation
-             <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
+          <Button size="sm" asChild className="hidden sm:inline-flex ">
+            <Link href="#contact">
+              Free Consultation
+              <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
             </Link>
-            
           </Button>
 
           <Button
@@ -86,10 +83,17 @@ export function Navbar() {
                 {item.label}
               </Link>
             ))}
-            <Button asChild className="mt-2 w-full">
-              <Link href="#contact" onClick={() => setOpen(false)}>
-                Free Consultation
-              </Link>
+            <Button
+              
+              className="mt-2 w-full"
+              onClick={() => {
+                document.getElementById("contact")?.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start",
+                });
+              }}
+            >
+              Free Consultation
             </Button>
           </nav>
         </div>

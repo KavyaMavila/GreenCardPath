@@ -27,7 +27,6 @@ export function EligibilityChecklistSection() {
             align="center"
             eyebrow="Self-Assessment"
             title="Do You Qualify?"
-            description="EB-1A requires meeting 3 of the 10 USCIS criteria."
             className="mx-auto"
           />
           <p className="text-center font-titillium italic text-[var(--text-session-description)]">
@@ -55,10 +54,12 @@ export function EligibilityChecklistSection() {
                       className="h-6 w-6 rounded-[8px] border-[var(--qualify-checkbox-border)] data-[state=checked]:bg-white "
                     />
                     <div className="space-y-1">
-                      <Label htmlFor={id} className="text-md font-titillium font-medium text-[var(--qualify-checkbox-text)]">
+                      <Label
+                        htmlFor={id}
+                        className="text-md font-titillium font-medium text-[var(--qualify-checkbox-text)]"
+                      >
                         {item}
                       </Label>
-                     
                     </div>
                   </div>
                 );
@@ -66,15 +67,16 @@ export function EligibilityChecklistSection() {
             </div>
 
             <div className="mt-10 flex flex-col items-center gap-6">
-
-
               <Button
                 className="h-[56px] rounded-[10px] bg-[var(--color-primary-green)] px-6 text-white"
-                asChild
+                onClick={() => {
+                  document.getElementById("contact")?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                  });
+                }}
               >
-                <Link href="#contact">
-                  Get a Free Case Evaluation →
-                </Link>
+                Get a Free Case Evaluation →
               </Button>
             </div>
           </div>

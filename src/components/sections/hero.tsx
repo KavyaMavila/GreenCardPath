@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
@@ -12,12 +13,11 @@ export function Hero() {
     <div className="relative min-h-[min(100svh,920px)] overflow-hidden  bg-black text-white">
       <div className="absolute inset-0" aria-hidden>
         <Image
-          src="/images/hero-lifestyle-bg.webp"
+          src="/images/main-image.webp"
           alt=""
           fill
           priority
           sizes="100vw"
-
           className="object-cover object-[68%_center] sm:object-[65%_center] lg:object-[60%_center]"
         />
       </div>
@@ -28,29 +28,54 @@ export function Hero() {
             <div className="mx-auto max-w-full  sm:max-w-[820px] sm:px-0 text-center sm:max-w-[820px] lg:mx-0 lg:text-left">
               <h1 className="mt-6 font-sora font-semibold  tracking-tight text-[32px] sm:text-[44px] lg:text-[52px]">
                 Your Path to a US Green Card
-                <br />
-                — Starts Here
+                <br />— Starts Here
               </h1>
 
               <p className="mx-auto font-titillium  mt-6 max-w-[320px] text-base leading-relaxed text-[var(--color-text-primary)] sm:max-w-[600px] sm:text-lg lg:mx-0">
-                We help extraordinary professionals file EB-1A and NIW self-petitions — without an employer,
-                without a lottery, and with a track record of approvals.
+                We help extraordinary professionals file EB-1A and NIW
+                self-petitions — without an employer, without a lottery, and
+                with a track record of approvals.
               </p>
 
-              <div className="mt-8 flex flex-row items-center justify-center lg:justify-start gap-3 lg:justify-start">
-                <Button asChild size="lg" className="sm:w-auto px-5">
-                  <Link href="#eligibility">
-                    Find My Eligibility
-                    <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
-                  </Link>
+              <div className="mt-8 flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-center lg:justify-start">
+                <Button
+                  size="lg"
+                  onClick={() => {
+                    document.getElementById("contact")?.scrollIntoView({
+                      behavior: "smooth",
+                      block: "start",
+                    });
+                  }}
+                  className="sm:w-auto px-5"
+                >
+                  Book free call
+                  <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
                 </Button>
                 <Button
-                  asChild
                   size="lg"
+                  onClick={() => {
+                    document.getElementById("eligibility")?.scrollIntoView({
+                      behavior: "smooth",
+                      block: "start",
+                    });
+                  }}
+                  className="sm:w-auto px-5"
+                >
+                  Find My Eligibility
+                  <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
+                </Button>
+                <Button
+                  size="lg"
+                  onClick={() => {
+                    document.getElementById("process")?.scrollIntoView({
+                      behavior: "smooth",
+                      block: "start",
+                    });
+                  }}
                   variant="outline"
                   className=" border-white/35 bg-white/0 text-white backdrop-blur-sm hover:bg-white/10 sm:w-auto px-5"
                 >
-                  <Link href="#process">See How It Works</Link>
+                  See How It Works
                 </Button>
               </div>
             </div>

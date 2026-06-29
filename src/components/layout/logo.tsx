@@ -18,7 +18,7 @@ export function Logo({ className, variant = "text", priority = false }: LogoProp
     return (
       <Link href="/" className={cn("inline-flex items-center", className)}>
         <Image
-          src="/images/logo-gcp-white.png"
+          src="/images/gcp-white 1.png"
           alt="GreenCardPath"
           width={327}
           height={62}
