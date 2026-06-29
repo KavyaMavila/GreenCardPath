@@ -8,7 +8,7 @@ export default function ThankYouPage() {
     localStorage.setItem("meetingScheduled", "true");
   }, []);
   return (
-    <main className="flex min-h-screen items-center justify-center">
+    <main className="flex min-h-screen items-center justify-center  text-[#1A1A1A]">
       <div className="text-center">
         <h1 className="text-4xl font-bold">
           🎉 Meeting Scheduled!

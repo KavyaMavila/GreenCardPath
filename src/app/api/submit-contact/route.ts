@@ -81,63 +81,14 @@ export async function POST(request: Request) {
   console.log("======================");
 
   // ── Google Calendar ───────────────────────────────────────────────────────
-  try {
-    const auth = new google.auth.GoogleAuth({
-      credentials: {
-        client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-        private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
-      },
-      scopes: ["https://www.googleapis.com/auth/calendar"],
-    });
+  if (!recaptchaData.success || recaptchaData.score < 0.5) {
+  return NextResponse.json(
+    { error: "reCAPTCHA verification failed. Please try again." },
+    { status: 400 }
+  );
+}
 
-    const calendar = google.calendar({ version: "v3", auth });
-
-    const event = {
-      summary: `Call Request: ${fullName}`,
-      description: [
-        `Name:     ${fullName}`,
-        `Email:    ${email}`,
-        phone    ? `Phone:    ${phone}`    : null,
-        linkedin ? `LinkedIn: ${linkedin}` : null,
-        ``,
-        `Notes:`,
-        notes || "(none)",
-        ``,
-        hasDateAndTime
-          ? `Requested slot: ${preferredDate} at ${preferredTime}`
-          : `No slot selected — auto-scheduled 30min from submission`,
-        ``,
-        `Submitted: ${new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`,
-      ].filter((l) => l !== null).join("\n"),
-
-      start: { dateTime: startISO, timeZone: "Asia/Kolkata" },
-      end:   { dateTime: endISO,   timeZone: "Asia/Kolkata" },
-      colorId: "2",
-
-      reminders: {
-        useDefault: false,
-        overrides: [
-          { method: "email", minutes: 60 },
-          { method: "popup", minutes: 30 },
-        ],
-      },
-    };
-
-    const calendarId = process.env.GOOGLE_CALENDAR_ID;
-    if (!calendarId) {
-      return NextResponse.json({ error: "Server misconfiguration." }, { status: 500 });
-    }
-
-   const response = await calendar.events.insert({
-  calendarId,
-  requestBody: event,
+return NextResponse.json({
+  success: true,
 });
-
-    console.log("✅ Event created:", response.data.htmlLink);
-    return NextResponse.json({ success: true });
-
-  } catch (err: any) {
-    console.error("❌ Calendar API error:", err?.message || err);
-    return NextResponse.json({ error: "Failed to save. Please try again." }, { status: 500 });
-  }
 }
