@@ -14,7 +14,7 @@ export const navItems = [
 ] as const;
 
 export const stats = [
-  { value: "30+", label: "Petitions filed" },
+  { value: "50+", label: "Petitions filed" },
   { value: "96%", label: "Approval rate" },
   { value: "0", label: "Employer needed" },
 ] as const;
