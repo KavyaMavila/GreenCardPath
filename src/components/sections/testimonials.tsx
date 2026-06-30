@@ -28,7 +28,7 @@ export function TestimonialsSection() {
               style={{ aspectRatio: "16/5" }}
             >
               <Image
-                src="/images/handshake image.webp"
+                src="/images/HS.webp"
                 alt="Professionals shaking hands"
                 fill
                 className="object-cover"

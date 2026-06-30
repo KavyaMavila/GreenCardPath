@@ -13,7 +13,7 @@ export function Hero() {
     <div className="relative min-h-[min(100svh,920px)] overflow-hidden  bg-black text-white">
       <div className="absolute inset-0" aria-hidden>
         <Image
-          src="/images/main-image.webp"
+          src="/images/hero-lifestyle-bg.webp"
           alt=""
           fill
           priority
@@ -49,19 +49,6 @@ export function Hero() {
                   className="sm:w-auto px-5"
                 >
                   Book free call
-                  <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
-                </Button>
-                <Button
-                  size="lg"
-                  onClick={() => {
-                    document.getElementById("eligibility")?.scrollIntoView({
-                      behavior: "smooth",
-                      block: "start",
-                    });
-                  }}
-                  className="sm:w-auto px-5"
-                >
-                  Find My Eligibility
                   <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
                 </Button>
                 <Button

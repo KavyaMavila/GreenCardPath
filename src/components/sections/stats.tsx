@@ -1,7 +1,6 @@
 import { Container } from "@/components/layout/container";
 import { FadeIn } from "@/components/layout/fade-in";
 import { stats } from "@/lib/content/landing";
-import Image from "next/image";
 export function StatsSection() {
   return (
     <div className="relative z-20 -mt-16 flex w-full flex-col lg:-mt-5 lg:flex-row">

@@ -27,7 +27,7 @@ export const comparison = {
   cards: [
     {
       key: "eb1a",
-      image:"/images/EB-1A image.webp",
+      image:"/images/EB.webp",
       name: "EB-1A",
       tagline: "Extraordinary Ability",
       summary:
@@ -54,7 +54,7 @@ export const comparison = {
     },
     {
       key: "niw",
-      image:"/images/NIW image.webp",
+      image:"/images/NIW.webp",
       name: "NIW",
       tagline: "National Interest Waiver",
       summary:

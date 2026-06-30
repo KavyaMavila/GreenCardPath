@@ -222,7 +222,7 @@ export function ContactFormSection() {
                   style={{ height: 440 }}
                 >
                   <Image
-                    src="/images/form image.webp"
+                    src="/images/form-Img.webp"
                     fill
                     alt="Person typing on laptop"
                     sizes="(max-width: 640px) 100vw, 50vw"
@@ -231,7 +231,7 @@ export function ContactFormSection() {
                 </div>
                 <div className="relative mt-8 h-[220px] sm:h-[320px] lg:hidden">
                   <Image
-                    src="/images/form image.webp"
+                    src="/images/form-Img.webp"
                     fill
                     alt="Person typing on laptop"
                     sizes="(max-width: 640px) 100vw, 50vw"
@@ -248,11 +248,11 @@ export function ContactFormSection() {
                     <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-gray-100">
                       <div
                         className="h-full rounded-full bg-[#83CD20] transition-all"
-                        style={{ width: `${(step / 5) * 100}%` }}
+                        style={{ width: `${(step / 4 ) * 100}%` }}
                       />
                     </div>
                     <span className="shrink-0 font-titillium text-[13px] text-[#4A4A4A]">
-                      Step {step} of 5
+                      Step {step} of 4
                     </span>
                   </div>
 
@@ -390,7 +390,7 @@ export function ContactFormSection() {
                         </div>
                       )}
 
-                      {step === 3 && (
+                      {/* {step === 3 && (
                         <div className="space-y-4">
                           <h3 className="text-3xl font-bold text-[#1A1A1A]">
                             Check everything that applies to you
@@ -463,9 +463,9 @@ export function ContactFormSection() {
                             </button>
                           </div>
                         </div>
-                      )}
+                      )} */}
 
-                      {step === 4 && (
+                      {step === 3 && (
                         <div className="space-y-4">
                           <h3 className="text-3xl font-bold text-[#1A1A1A]">
                             What field are you in?
@@ -502,14 +502,14 @@ export function ContactFormSection() {
                           <div className="flex justify-between">
                             <button
                               className="bg-[#83CD20] text-white px-6 py-3 rounded"
-                              onClick={() => setStep(3)}
+                              onClick={() => setStep(2)}
                             >
                               ← Back
                             </button>
 
                             <button
                               disabled={!eligibilityData.field}
-                              onClick={() => setStep(5)}
+                              onClick={() => setStep(4)}
                               className="bg-[#83CD20] text-white px-6 py-3 rounded"
                             >
                               Continue →
@@ -518,7 +518,7 @@ export function ContactFormSection() {
                         </div>
                       )}
 
-                      {step === 5 && (
+                      {step === 4 && (
                         <>
                       <form onSubmit={handleSubmit} noValidate>
                         <div className="space-y-7">
